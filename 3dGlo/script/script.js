@@ -48,30 +48,25 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     countTimer('1 july 2020');
 
-
     const toggleMenu = () => {
-
-        const btnMenu = document.querySelector('.menu'),
-            menu = document.querySelector('menu'),
-            closeBtn = document.querySelector('.close-btn'),
-            menuItem = document.querySelectorAll('ul>li');
+        const menu = document.querySelector('menu');
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
         };
-        btnMenu.addEventListener('click', handlerMenu);
-        closeBtn.addEventListener('click', handlerMenu);
-
-        menuItem.forEach((elem) => elem.addEventListener('click', handlerMenu));
-
+        document.body.addEventListener('click', event => {
+            let target = event.target;
+            target = target.closest('.menu') || target.closest('menu ul>li') || target.closest('.close-btn');
+            if (target) {
+                handlerMenu();
+            }
+        });
     };
     toggleMenu();
 
     const togglePopUp = () => {
         const popup = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
-            popupClose = document.querySelector('.popup-close'),
             popupContent = document.querySelector('.popup-content');
-
         let count = 0,
             count1 = 100;
 
@@ -81,11 +76,8 @@ window.addEventListener('DOMContentLoaded', () => {
             count1 += 10;
             popup.style.display = 'block';
             if (popup.style.opacity < 5) {
-
-
                 popup.style.opacity = count += 0.155;
                 popupContent.style.left = count1 * 2 + 'px';
-
             } else {
                 cancelAnimationFrame(popupanimate);
             }
@@ -99,14 +91,50 @@ window.addEventListener('DOMContentLoaded', () => {
                     popup.style.display = '';
                 }
             });
-
-            popupClose.addEventListener('click', () => {
-                popup.style.display = '';
-            });
-
+        });
+        popup.addEventListener('click', event => {
+            let target = event.target;
+            if (target.classList.contains('popup-close')) {
+                popup.style.display = 'none';
+            } else {
+                target = target.closest('.popup-content');
+                if (!target) {
+                    popup.style.display = 'none';
+                }
+            }
         });
     };
     togglePopUp();
 
+    const tabs = () => {
+        const tabHeader = document.querySelector('.service-header'),
+            tab = tabHeader.querySelectorAll('.service-header-tab'),
+            tabContent = document.querySelectorAll('.service-tab');
 
+        const toggleTabContent = index => {
+            for (let i = 0; i < tabContent.length; i++) {
+                if (index === i) { //index = 1
+                    tab[i].classList.add('active');
+                    tabContent[i].classList.remove('d-none');
+                } else {
+                    tab[i].classList.remove('active');
+                    tabContent[i].classList.add('d-none');
+                }
+            }
+        };
+
+        tabHeader.addEventListener('click', event => {
+            let target = event.target;
+            target = target.closest('.service-header-tab');
+
+            if (target) {
+                tab.forEach((item, i) => {
+                    if (item === target) {
+                        toggleTabContent(i);
+                    }
+                });
+            }
+        });
+    };
+    tabs();
 });
