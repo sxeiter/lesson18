@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
-   
+
     function countTimer(deadline) {
         const timeHours = document.querySelector('#timer-hours'),
             timeMinute = document.querySelector('#timer-minutes'),
@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeHours.textContent = timer.hours;
             timeMinute.textContent = timer.minutes;
             timeSeconds.textContent = timer.seconds;
-           
+
             if (timer.hours < 10) {
                 timeHours.textContent = "0" + timer.hours;
             } else if (timer.minute < 10) {
@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
         updateClock();
     }
     countTimer('1 july 2020');
-   
+
     const toggleMenu = () => {
         const menu = document.querySelector('menu');
 
@@ -65,7 +65,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     toggleMenu();
- 
+
     const togglePopUp = () => {
         const popup = document.querySelector('.popup'),
             popupBtn = document.querySelectorAll('.popup-btn'),
@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < tabContent.length; i++) {
                 if (index === i) {
                     tab[i].classList.add('active');
-                    tabContent[i].classList.remove('d-none'); 
+                    tabContent[i].classList.remove('d-none'); //Отображает элемент котрый выбран И||Э||Ф
                 } else {
                     tab[i].classList.remove('active');
                     tabContent[i].classList.add('d-none');
@@ -130,12 +130,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
         tabHeader.addEventListener('click', event => {
             let target = event.target;
-            target = target.closest('.service-header-tab'); 
+            target = target.closest('.service-header-tab'); //проверка селектора если не нашед === null
 
             if (target) {
                 tab.forEach((item, i) => {
                     if (item === target) {
-                        toggleTabContent(i); 
+                        toggleTabContent(i); //передает индекс элемента
                     }
                 });
             }
@@ -231,13 +231,13 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     slider();
-  
+
     const changePhoto = () => {
         const commandPhoto = document.querySelectorAll('.command__photo');
         commandPhoto.forEach(item => {
             let showPhoto;
 
-            item.addEventListener('mouseenter', event => { 
+            item.addEventListener('mouseenter', event => { //mouseover work too
                 showPhoto = event.target.src;
                 event.target.src = event.target.dataset.img;
             });
@@ -248,7 +248,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     changePhoto();
-    
+
     const deleteWord = () => {
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
@@ -258,4 +258,5 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     deleteWord();
+
 });
