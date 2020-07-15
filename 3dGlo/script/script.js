@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeHours.textContent = timer.hours;
             timeMinute.textContent = timer.minutes;
             timeSeconds.textContent = timer.seconds;
-
+           
             if (timer.hours < 10) {
                 timeHours.textContent = "0" + timer.hours;
             } else if (timer.minute < 10) {
@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
         };
         updateClock();
     }
-    countTimer('1 july 2020');
+    countTimer('9 july 2020');
 
     const toggleMenu = () => {
         const menu = document.querySelector('menu');
@@ -88,6 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+
         popupBtn.forEach(elem => {
             elem.addEventListener('click', () => {
                 if (window.innerWidth >= 768) {
@@ -120,7 +121,7 @@ window.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < tabContent.length; i++) {
                 if (index === i) {
                     tab[i].classList.add('active');
-                    tabContent[i].classList.remove('d-none'); //Отображает элемент котрый выбран И||Э||Ф
+                    tabContent[i].classList.remove('d-none'); 
                 } else {
                     tab[i].classList.remove('active');
                     tabContent[i].classList.add('d-none');
@@ -130,12 +131,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
         tabHeader.addEventListener('click', event => {
             let target = event.target;
-            target = target.closest('.service-header-tab'); //проверка селектора если не нашед === null
+            target = target.closest('.service-header-tab'); 
 
             if (target) {
                 tab.forEach((item, i) => {
                     if (item === target) {
-                        toggleTabContent(i); //передает индекс элемента
+                        toggleTabContent(i); 
                     }
                 });
             }
@@ -248,7 +249,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     changePhoto();
-
+    
     const deleteWord = () => {
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
@@ -259,4 +260,52 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     deleteWord();
 
+    const calculator = (price = 100) => {
+        
+        const calcItem = document.querySelectorAll('.calc-item');
+        calcItem.forEach(check => {
+            check.addEventListener('input', () => {
+                check.value = check.value.replace(/[^0-9]/, '');
+            });
+        });
+
+        const calcBlock = document.querySelector('.calc-block'),
+            calcType = document.querySelector('.calc-type'),
+            calcSquare = document.querySelector('.calc-square'),
+            calcCount = document.querySelector('.calc-count'),
+            calcDay = document.querySelector('.calc-day'),
+            totalValue = document.getElementById('total');
+
+        const countSum = () => {
+            let total = 0,
+                countValue = 1,
+                dayValue = 1;
+            const typeValue = calcType.options[calcType.selectedIndex].value,
+                squareValue = +calcSquare.value;
+
+            if (calcCount.value > 1) {
+                countValue += (calcCount.value - 1) / 10;
+            }
+
+            if (calcDay.value && calcDay.value < 5) {
+                dayValue *= 2;
+            } else if (calcDay.value && calcDay.value < 10) {
+                dayValue *= 1.5;
+            }
+
+            if (typeValue && squareValue) {
+                total = price * typeValue * squareValue * countValue * dayValue;
+            }
+
+            totalValue.textContent = total;
+        };
+
+        calcBlock.addEventListener('change', event => {
+            const target = event.target;
+            if (target === calcType || target === calcSquare || target === calcCount || target === calcDay) {
+                countSum();
+            }
+        });
+    };
+    calculator(100);
 });
