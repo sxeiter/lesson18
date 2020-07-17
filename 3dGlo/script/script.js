@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeHours.textContent = timer.hours;
             timeMinute.textContent = timer.minutes;
             timeSeconds.textContent = timer.seconds;
-           
+        
             if (timer.hours < 10) {
                 timeHours.textContent = "0" + timer.hours;
             } else if (timer.minute < 10) {
@@ -97,6 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     popup.style.display = '';
                 }
             });
+
         });
         popup.addEventListener('click', event => {
             let target = event.target;
@@ -232,13 +233,13 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     slider();
-
+   
     const changePhoto = () => {
         const commandPhoto = document.querySelectorAll('.command__photo');
         commandPhoto.forEach(item => {
             let showPhoto;
 
-            item.addEventListener('mouseenter', event => { //mouseover work too
+            item.addEventListener('mouseenter', event => { 
                 showPhoto = event.target.src;
                 event.target.src = event.target.dataset.img;
             });
@@ -249,7 +250,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     changePhoto();
-    
+   
     const deleteWord = () => {
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
@@ -260,8 +261,8 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     deleteWord();
 
-    const calculator = (price = 100) => {
-        
+    const calc = (price = 100) => {
+      
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
             check.addEventListener('input', () => {
@@ -269,19 +270,40 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        const calcBlock = document.querySelector('.calc-block'),
-            calcType = document.querySelector('.calc-type'),
-            calcSquare = document.querySelector('.calc-square'),
-            calcCount = document.querySelector('.calc-count'),
-            calcDay = document.querySelector('.calc-day'),
-            totalValue = document.getElementById('total');
+        const calcBlock = document.querySelector('.calc-block');
+        const calcType = document.querySelector('.calc-type');
+        const calcSquare = document.querySelector('.calc-square');
+        const calcCount = document.querySelector('.calc-count');
+        const calcDay = document.querySelector('.calc-day');
+        const totalValue = document.querySelector('#total');
+
+        let intervlId;
+        const renderTotal = total => {
+            let startTotal = 0;
+
+            clearInterval(intervlId);
+
+            if (calcType.options[calcType.selectedIndex] === 0) {
+                clearInterval(intervlId);
+                startTotal = 0;
+            }
+
+            intervlId = setInterval(() => {
+                startTotal += total.toString().length;
+                totalValue.textContent = startTotal;
+                if (startTotal >= total) {
+                    totalValue.textContent = total;
+                    clearInterval(intervlId);
+                }
+            }, 10);
+        };
 
         const countSum = () => {
-            let total = 0,
-                countValue = 1,
-                dayValue = 1;
-            const typeValue = calcType.options[calcType.selectedIndex].value,
-                squareValue = +calcSquare.value;
+            let total = 0;
+            let countValue = 1;
+            let dayValue = 1;
+            const typeValue = calcType.options[calcType.selectedIndex].value;
+            const squareValue = +calcSquare.value;
 
             if (calcCount.value > 1) {
                 countValue += (calcCount.value - 1) / 10;
@@ -295,17 +317,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
             if (typeValue && squareValue) {
                 total = price * typeValue * squareValue * countValue * dayValue;
-            }
 
-            totalValue.textContent = total;
+            }
+            renderTotal(total);
         };
 
-        calcBlock.addEventListener('change', event => {
-            const target = event.target;
-            if (target === calcType || target === calcSquare || target === calcCount || target === calcDay) {
+        calcBlock.addEventListener('change', evt => {
+            const target = evt.target;
+
+            if (target.matches('select') || target.matches('input')) {
                 countSum();
             }
+
         });
     };
-    calculator(100);
+
+    calc(100);
+    
 });
