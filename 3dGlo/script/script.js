@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
-
+    
     function countTimer(deadline) {
         const timeHours = document.querySelector('#timer-hours'),
             timeMinute = document.querySelector('#timer-minutes'),
@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeHours.textContent = timer.hours;
             timeMinute.textContent = timer.minutes;
             timeSeconds.textContent = timer.seconds;
-        
+            
             if (timer.hours < 10) {
                 timeHours.textContent = "0" + timer.hours;
             } else if (timer.minute < 10) {
@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', () => {
         updateClock();
     }
     countTimer('9 july 2020');
-
+    
     const toggleMenu = () => {
         const menu = document.querySelector('menu');
 
@@ -88,7 +88,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-
         popupBtn.forEach(elem => {
             elem.addEventListener('click', () => {
                 if (window.innerWidth >= 768) {
@@ -97,7 +96,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     popup.style.display = '';
                 }
             });
-
         });
         popup.addEventListener('click', event => {
             let target = event.target;
@@ -233,13 +231,13 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     slider();
-   
+    
     const changePhoto = () => {
         const commandPhoto = document.querySelectorAll('.command__photo');
         commandPhoto.forEach(item => {
             let showPhoto;
 
-            item.addEventListener('mouseenter', event => { 
+            item.addEventListener('mouseenter', event => {
                 showPhoto = event.target.src;
                 event.target.src = event.target.dataset.img;
             });
@@ -250,7 +248,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     changePhoto();
-   
+    
     const deleteWord = () => {
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
@@ -262,7 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
     deleteWord();
 
     const calc = (price = 100) => {
-      
+       
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
             check.addEventListener('input', () => {
@@ -334,4 +332,91 @@ window.addEventListener('DOMContentLoaded', () => {
 
     calc(100);
     
+    const sendForm = () => {
+
+        const errorMessage = 'Что-то пошло не так...',
+            loadMessage = 'Загрузка...',
+            successMessage = 'Спасибо! Мы скоро свяжемся с Вами!';
+        const body = {};
+        const allForms = document.querySelectorAll('form');
+        const postData = (body, outputData, errorData) => {
+
+            const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    outputData();
+                } else {
+                    errorData(request.status);
+                }
+            });
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify(body));
+        };
+
+        const phoneMaxLengh = () => {
+            const inputPhone1 = document.querySelector('#form1-phone').maxLength = '10',
+                inputPhone2 = document.querySelector('#form2-phone').maxLength = '10',
+                inputPhone3 = document.querySelector('#form3-phone').maxLength = '10';
+
+            inputPhone1.maxLength = '10';
+            inputPhone2.maxLength = '10';
+            inputPhone3.maxLength = '10';
+        };
+        phoneMaxLengh();
+
+        allForms.forEach(form => {
+            form.addEventListener('input', evt => {
+                const target = evt.target;
+                if (target.name === 'user_phone') {
+                    if (target.style) {
+                        target.style.border = 'none';
+                    }
+                    target.value = target.value.replace(/[^+\d]/g, '');
+                    if (!/^\+?(\d){0,18}$/g.test(target.value)) {
+                        target.value = target.value.substring(0, target.value.length - 1);
+                    }
+
+                }
+                if (target.name === 'user_name' || target.name === 'user_message') {
+                    target.value = target.value.replace(/[^а-я ]/gi, '');
+                }
+                if (target.name === 'user_email') {
+                    target.value = target.value.replace(/[а-я ]/gi, '');
+                }
+               
+            });
+            const statusMessage = document.createElement('div');
+            statusMessage.style.cssText = 'font-size: 2rem';
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                form.appendChild(statusMessage);
+                statusMessage.textContent = loadMessage;
+
+                const formData = new FormData(form);
+                form.querySelectorAll('input').forEach(elem => {
+                    elem.value = '';
+                });
+
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+
+                postData(body,
+                    () => {
+                        statusMessage.textContent = successMessage;
+                    },
+                    error => {
+                        statusMessage.textContent = errorMessage;
+                        console.log(error);
+                    });
+            });
+        });
+    };
+    sendForm();
+
 });
