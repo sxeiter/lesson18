@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeHours.textContent = timer.hours;
             timeMinute.textContent = timer.minutes;
             timeSeconds.textContent = timer.seconds;
-            
+
             if (timer.hours < 10) {
                 timeHours.textContent = "0" + timer.hours;
             } else if (timer.minute < 10) {
@@ -123,7 +123,7 @@ window.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < tabContent.length; i++) {
                 if (index === i) {
                     tab[i].classList.add('active');
-                    tabContent[i].classList.remove('d-none'); 
+                    tabContent[i].classList.remove('d-none');
                 } else {
                     tab[i].classList.remove('active');
                     tabContent[i].classList.add('d-none');
@@ -133,12 +133,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
         tabHeader.addEventListener('click', event => {
             let target = event.target;
-            target = target.closest('.service-header-tab'); 
+            target = target.closest('.service-header-tab');
 
             if (target) {
                 tab.forEach((item, i) => {
                     if (item === target) {
-                        toggleTabContent(i); 
+                        toggleTabContent(i);
                     }
                 });
             }
@@ -241,7 +241,7 @@ window.addEventListener('DOMContentLoaded', () => {
         commandPhoto.forEach(item => {
             let showPhoto;
 
-            item.addEventListener('mouseenter', event => { 
+            item.addEventListener('mouseenter', event => {
                 showPhoto = event.target.src;
                 event.target.src = event.target.dataset.img;
             });
@@ -265,7 +265,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // калькулятор 
 
     const calc = (price = 100) => {
-        
+
         const calcItem = document.querySelectorAll('.calc-item');
         calcItem.forEach(check => {
             check.addEventListener('input', () => {
@@ -335,7 +335,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     calc(100);
-    
+
     const sendForm = () => {
 
         const errorMessage = 'Что-то пошло не так...',
@@ -343,21 +343,13 @@ window.addEventListener('DOMContentLoaded', () => {
             successMessage = 'Спасибо! Мы скоро свяжемся с Вами!';
         const body = {};
         const allForms = document.querySelectorAll('form');
-        const postData = body => new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener('readystatechange', () => {
-                if (request.readyState !== 4) {
-                    return;
-                }
-                if (request.status === 200) {
-                    resolve();
-                } else {
-                    reject(request.status);
-                }
-            });
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.send(JSON.stringify(body));
+        const postData = body => fetch('./server.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+            mode: 'cors'
         });
 
         const phoneMaxLengh = () => {
@@ -410,12 +402,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
                 const outputData = () => {
                     statusMessage.textContent = successMessage;
-                  
+
                 };
 
                 const error = () => {
                     statusMessage.textContent = errorMessage;
-                   
+
                 };
 
                 postData(body)
