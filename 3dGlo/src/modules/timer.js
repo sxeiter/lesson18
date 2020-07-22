@@ -1,5 +1,5 @@
 function countTimer(deadline) {
-    'use strict';
+   
     const timeHours = document.querySelector('#timer-hours'),
         timeMinute = document.querySelector('#timer-minutes'),
         timeSeconds = document.querySelector('#timer-seconds');

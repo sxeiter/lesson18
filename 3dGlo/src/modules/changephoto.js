@@ -1,5 +1,5 @@
 const changePhoto = () => {
-    'use strict';
+    
     const commandPhoto = document.querySelectorAll('.command__photo');
     commandPhoto.forEach(item => {
         let showPhoto;

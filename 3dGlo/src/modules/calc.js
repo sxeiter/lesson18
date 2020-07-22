@@ -1,5 +1,5 @@
 const calc = (price = 100) => {
-    'use strict';
+    
     const calcItem = document.querySelectorAll('.calc-item');
     calcItem.forEach(check => {
         check.addEventListener('input', () => {
