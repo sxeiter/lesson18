@@ -1,0 +1,18 @@
+const changePhoto = () => {
+    'use strict';
+    const commandPhoto = document.querySelectorAll('.command__photo');
+    commandPhoto.forEach(item => {
+        let showPhoto;
+
+        item.addEventListener('mouseenter', event => {
+            showPhoto = event.target.src;
+            event.target.src = event.target.dataset.img;
+        });
+
+        item.addEventListener('mouseleave', event => {
+            event.target.src = showPhoto;
+        });
+    });
+};
+
+export default changePhoto;
